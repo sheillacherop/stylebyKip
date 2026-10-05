@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | MK50</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --almond: #CEB093; --black: #000000; --onyx: #0a0a0a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            padding-top: 120px;
+        }
+
+        /* Navigation - EXACT SAME as other pages */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 5%;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+            border-bottom: 1px solid rgba(206,192,179,0.1);
+        }
+        .logo { font-family: 'Rock Salt'; color: var(--almond); font-size: 1.5rem; text-decoration: none; }
+        .nav-links a { color: #fff; text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-left: 20px;}
+
+        .contact-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            padding: 40px 20px;
+        }
+
+        h1 { font-family: 'Rock Salt'; color: var(--almond); font-size: 2.5rem; margin-bottom: 20px; }
+        p { color: #888; line-height: 1.6; margin-bottom: 30px; }
+
+        .contact-info div {
+            margin-bottom: 30px;
+        }
+
+        .contact-info h3 {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--almond);
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            font-size: 1.5rem;
+        }
+
+        .social-links a {
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover { color: var(--almond); transform: translateY(-5px); }
+
+        /* Quick Message Form */
+        .contact-form {
+            background: var(--onyx);
+            padding: 40px;
+            border: 1px solid rgba(206,192,179,0.1);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            background: #111;
+            border: 1px solid #222;
+            color: white;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        input:focus, textarea:focus { border-color: var(--almond); }
+
+        .send-btn {
+            width: 100%;
+            background: var(--almond);
+            color: var(--black);
+            padding: 15px;
+            border: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">MK50</a>
+    <div class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="products.html">Shop</a>
+        <a href="orders.html">My Bag</a>
+        <a href="contacts.html">Contact</a>
+    </div>
+</nav>
+
+<div class="contact-container">
+    <div class="contact-info">
+        <h1>Connect</h1>
+        <p>Whether you're looking for a custom fit or checking order status, we're here to keep your style sharp.</p>
+        
+        <div>
+            <h3>Studio Location</h3>
+            <p>Nairobi, Kenya<br>Available for Pickups & Delivery</p>
+        </div>
+
+        <div>
+            <h3>WhatsApp Support</h3>
+            <p>+254 768 660 198</p>
+        </div>
+
+        <div>
+            <h3>Follow the Movement</h3>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-form">
+        <h3 style="letter-spacing: 2px; margin-bottom: 20px; font-size: 0.8rem; color: var(--almond);">DROP A MESSAGE</h3>
+        <input type="text" placeholder="Full Name">
+        <input type="email" placeholder="Email Address">
+        <textarea rows="5" placeholder="Your Message..."></textarea>
+        <button class="send-btn">Send Inquiry</button>
+    </div>
+</div>
+
+</body>
+</html>
