@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Collection | MK50</title>
+    <!-- Premium fonts matching your aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { 
+            --white: #ffffff;
+            --pure-black: #000000;
+            --dark-blue: #101c42;
+            --accent-burgundy: #4a1525;
+            --glass-bg: rgba(15, 15, 15, 0.95);
+            --border-glow: rgba(255, 255, 255, 0.08);
+            --card-bg: #050505;
+            --discount-green: #2ed573;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('images/wall2.png') no-repeat center center/cover;
+            background-attachment: fixed;
+            color: var(--white);
+            padding-top: 140px;
+            padding-bottom: 100px;
+        }
+
+        /* Fixed Navigation Bar */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 35px 60px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        }
+        .logo { font-family: 'Rock Salt', cursive; color: var(--white); font-size: 1.6rem; text-decoration: none; letter-spacing: -1px; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { 
+            color: rgba(255, 255, 255, 0.6); text-decoration: none; font-size: 0.75rem; 
+            text-transform: uppercase; letter-spacing: 3px; font-weight: 700; transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--white); }
+
+        .container { max-width: 1300px; margin: 0 auto; padding: 20px; }
+        
+        /* Product Shoe Grid - Matching image_1fcbc4.jpg styling */
+        .product-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px;
+        }
+        .product-card {
+            background: var(--card-bg); border: 1px solid var(--border-glow);
+            padding: 24px; transition: all 0.4s ease;
+            border-radius: 4px; display: flex; flex-direction: column;
+        }
+        .product-card:hover { border-color: rgba(255,255,255,0.2); }
+        .product-card img { width: 100%; height: 290px; object-fit: cover; margin-bottom: 20px; border-radius: 2px; }
+        .product-card h3 { font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; text-align: center;}
+        .price-line { display: block; font-weight: 400; color: #888; margin-bottom: 20px; font-size: 0.85rem; text-align: center; }
+        
+        .btn-buy {
+            display: block; width: 100%; padding: 15px;
+            background: transparent; border: 1px solid rgba(255,255,255,0.3); 
+            color: var(--white); text-transform: uppercase;
+            font-weight: 700; font-size: 0.75rem; letter-spacing: 2px;
+            cursor: pointer; transition: 0.3s; border-radius: 4px; margin-top: auto;
+        }
+        .btn-buy:hover { background: var(--white); color: var(--pure-black); }
+
+        /* Floating Basket Trigger */
+        #floating-basket {
+            position: fixed; bottom: 40px; right: 40px;
+            background: var(--white); color: var(--pure-black);
+            width: 65px; height: 65px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 1001; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease;
+        }
+        #floating-basket:hover { transform: scale(1.08); }
+        #cart-count {
+            position: absolute; top: -2px; right: -2px;
+            background: var(--accent-burgundy); color: white; padding: 4px 8px;
+            border-radius: 50%; font-size: 0.75rem; font-weight: bold;
+        }
+
+        /* Your Bag Slide-Out Panel */
+        #cart-panel {
+            position: fixed; top: 0; right: -420px; width: 400px; height: 100vh;
+            background: rgba(5, 5, 5, 0.98); z-index: 1002; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding: 40px 30px;
+            border-left: 1px solid var(--border-glow); overflow-y: auto;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        }
+        #cart-panel.open { right: 0; }
+        .close-cart { cursor: pointer; color: var(--white); float: right; font-size: 2rem; line-height: 1; }
+        
+        .cart-item { margin: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+        .checkout-btn {
+            width: 100%; background: linear-gradient(135deg, var(--dark-blue), var(--accent-burgundy)); color: var(--white);
+            padding: 18px; border: none; font-weight: bold; cursor: pointer; border-radius: 4px;
+            margin-top: 25px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;
+        }
+
+        /* Selection Popup Modal - Perfect layout match to image_1fc880.png */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background: #0f0f0f; border: 1px solid var(--border-glow);
+            padding: 40px 30px; border-radius: 8px; max-width: 460px; width: 100%;
+            text-align: center;
+        }
+        .modal-box h4 { font-family: 'Rock Salt', cursive; font-size: 1.5rem; margin-bottom: 30px; color: var(--white); font-weight: normal;}
+        .option-card {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
+            padding: 24px 20px; border-radius: 6px; margin-bottom: 20px; cursor: pointer;
+            transition: all 0.3s; text-align: left; position: relative;
+        }
+        .option-card:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+        .option-title { font-weight: 700; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 1px; display: block; margin-bottom: 8px; color: var(--white); }
+        .option-desc { font-size: 0.8rem; color: #8a8a8a; line-height: 1.5; }
+        .wholesale-badge { position: absolute; top: 22px; right: 20px; background: #4a1220; color: #ff99b0; font-size: 0.65rem; padding: 4px 8px; font-weight: 900; border-radius: 3px; letter-spacing: 1px;}
+        .close-modal { margin-top: 20px; display: inline-block; font-size: 0.85rem; color: #666; text-decoration: underline; cursor: pointer; transition: 0.2s;}
+        .close-modal:hover { color: #999; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation bar -->
+    <nav>
+        <a href="index.html" class="logo">MK50</a>
+        <div class="nav-links">
+            <a href="intro.html">Home</a>
+            <a href="products.html" style="color: var(--white);">Shop Drops</a>
+            <a href="orders.html">My Orders</a>
+            <a href="contacts.html">Contacts</a>
+        </div>
+    </nav>
+
+    <!-- Floating Bag Control -->
+    <div id="floating-basket" onclick="toggleCart()">
+        <i class="fas fa-shopping-bag" style="font-size: 1.3rem;"></i>
+        <span id="cart-count">0</span>
+    </div>
+
+    <!-- Your Bag Sidebar Menu Panel -->
+    <div id="cart-panel">
+        <span class="close-cart" onclick="toggleCart()">&times;</span>
+        <h2 style="font-family:'Rock Salt', cursive; font-size:1.3rem; margin-bottom: 25px;">Your Bag</h2>
+        
+        <div id="cart-items"></div>
+        
+        <div id="cart-total" style="margin-top:30px; font-weight:900; font-size: 1.2rem; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
+            Total: <span style="float:right;">KSh 0</span>
+        </div>
+        <button class="checkout-btn" onclick="goToPayment()">Confirm Order</button>
+    </div>
+
+    <!-- Tier Selection Modal - Replicated exactly from image_1fc880.png layout -->
+    <div class="modal-overlay" id="pricing-modal">
+        <div class="modal-box">
+            <h4 id="modal-shoe-title">Buy SHOE10</h4>
+            
+            <!-- Option 1: Retail -->
+            <div class="option-card" onclick="confirmTierSelection('retail')">
+                <span class="option-title">Retail Rate</span>
+                <span class="option-desc" id="modal-retail-desc">Purchase immediately at standard retail price.</span>
+            </div>
+            
+            <!-- Option 2: Wholesale -->
+            <div class="option-card" onclick="confirmTierSelection('wholesale')">
+                <span class="wholesale-badge">3+ PAIRS</span>
+                <span class="option-title">Wholesale Rate Set</span>
+                <span class="option-desc" id="modal-wholesale-desc">Get a bulk set of 3 pairs with KSh 150 off each pair.</span>
+            </div>
+            
+            <span class="close-modal" onclick="closePricingModal()">Cancel Selection</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Main Shoe Wall Grid Layout -->
+        <div class="product-grid" id="master-shoe-wall"></div>
+    </div>
+
+<script>
+    let cart = [];
+    let activeSelectionItem = null;
+
+    // Unique Initial Prices Matrix Engine (Ranges dynamically per model matching image_1fcbc4.jpg)
+    function generatePrice(index) {
+        const targetPrices = [1500, 1800, 2200, 2500, 2800, 3200, 3500, 3800, 4200, 4500];
+        return targetPrices[index % targetPrices.length];
+    }
+
+    // Dynamic Image Generator - Builds shoe1.jpg up to shoe45.jpg (Skips item 44)
+    function buildShoeWall() {
+        const wallContainer = document.getElementById('master-shoe-wall');
+        let cardHTML = '';
+        
+        for (let i = 1; i <= 45; i++) {
+            if (i === 44) continue; 
+            
+            let itemID = `shoe${i}`;
+            let basePrice = generatePrice(i);
+            
+            cardHTML += `
+                <div class="product-card">
+                    <img src="images/shoe${i}.jpg" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500'" alt="MK50 Premium Drop">
+                    <h3>Shoe Collection ${i}</h3>
+                    <span class="price-line">Retail: KSh ${basePrice.toLocaleString()} | Wholesale: KSh ${(basePrice - 150).toLocaleString()}</span>
+                    <button class="btn-buy" onclick="openPricingModal('${itemID}', ${basePrice})">Buy Set</button>
+                </div>`;
+        }
+        wallContainer.innerHTML = cardHTML;
+    }
+
+    function toggleCart() {
+        document.getElementById('cart-panel').classList.toggle('open');
+    }
+
+    // Pop-up Selection Modal Trigger Sequence - Perfectly matches image_1fc880.png structure
+    function openPricingModal(id, retailPrice) {
+        activeSelectionItem = { id, retailPrice };
+        document.getElementById('modal-shoe-title').innerText = `Buy ${id.toUpperCase()}`;
+        document.getElementById('modal-retail-desc').innerText = `Purchase immediately at standard retail: KSh ${retailPrice.toLocaleString()}`;
+        
+        // Dynamic explanation text showing the x3 bundle breakdown cleanly
+        let singleWholesale = retailPrice - 150;
+        let tripleWholesale = singleWholesale * 3;
+        document.getElementById('modal-wholesale-desc').innerText = `Buy bundle of 3 pairs. Each drops from KSh ${retailPrice.toLocaleString()} to KSh ${singleWholesale.toLocaleString()}. Total Set: KSh ${tripleWholesale.toLocaleString()}`;
+        
+        document.getElementById('pricing-modal').classList.add('show');
+    }
+
+    function closePricingModal() {
+        document.getElementById('pricing-modal').classList.remove('show');
+        activeSelectionItem = null;
+    }
+
+    // Handshake calculation choice sequence route
+    function confirmTierSelection(type) {
+        if (!activeSelectionItem) return;
+        
+        const uniqueCartID = Date.now() + Math.random(); 
+        cart.push({
+            cartId: uniqueCartID,
+            id: activeSelectionItem.id,
+            initialPrice: activeSelectionItem.retailPrice,
+            rateType: type
+        });
+        
+        closePricingModal();
+        updateUI();
+        
+        if(!document.getElementById('cart-panel').classList.contains('open')) toggleCart();
+    }
+
+    // Direct removal cancel buttons inside side bar bag section
+    function removeFromCart(cartId) {
+        cart = cart.filter(item => item.cartId !== cartId);
+        updateUI();
+    }
+
+    // Real-time Automated Shilling Calculator Engine
+    function updateUI() {
+        const itemsContainer = document.getElementById('cart-items');
+        const count = document.getElementById('cart-count');
+        const totalEl = document.getElementById('cart-total');
+        
+        itemsContainer.innerHTML = '';
+        let grandTotal = 0;
+        let totalItemsCounter = 0;
+        
+        cart.forEach((item) => {
+            let finalPriceBlock = item.initialPrice;
+            let badgeText = 'Retail (1 Pair)';
+            let itemQtyLabel = 'Qty: 1';
+            
+            if (item.rateType === 'wholesale') {
+                // YOUR EXACT PERFECT MULTIPLIED BLUEPRINT: (Original - 150) x 3
+                let discountedSinglePair = item.initialPrice - 150;
+                finalPriceBlock = discountedSinglePair * 3; 
+                badgeText = 'Wholesale Bundle';
+                itemQtyLabel = 'Qty: 3 Pairs Set';
+                totalItemsCounter += 3; // Counts as 3 items in the basket badge
+            } else {
+                totalItemsCounter += 1; // Retail counts as 1 item
+            }
+            
+            grandTotal += finalPriceBlock;
+            
+            itemsContainer.innerHTML += `
+                <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p style="font-weight:700; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px;">${item.id.toUpperCase()}</p>
+                        <span style="font-size:0.65rem; color:#aaa; text-transform:uppercase; letter-spacing:0.5px; display:inline-block; margin: 2px 0;">Rate: ${badgeText}</span>
+                        <p style="font-size:0.7rem; color:#666; margin-bottom:4px;">${itemQtyLabel}</p>
+                        <p style="margin-top:1px;">
+                            <span style="color: ${item.rateType === 'wholesale' ? 'var(--discount-green)' : 'var(--white)'}; font-weight:700; font-size:0.9rem;">
+                                KSh ${finalPriceBlock.toLocaleString()}
+                            </span>
+                        </p>
+                    </div>
+                    <!-- Cancel Button Control Interface Panel Element -->
+                    <button onclick="removeFromCart(${item.cartId})" style="background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:1.5rem; transition:0.2s;" onmouseover="this.style.color='#ff4757'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&times;</button>
+                </div>`;
+        });
+        
+        count.innerText = totalItemsCounter;
+        totalEl.innerHTML = `Total: <span style="float:right; font-weight:900;">KSh ${grandTotal.toLocaleString()}</span>`;
+    }
+
+    function goToPayment() {
+        if(cart.length === 0) return alert("Your bag is currently empty!");
+        
+        const orderData = cart.map(item => {
+            let finalPrice = item.rateType === 'wholesale' ? ((item.initialPrice - 150) * 3) : item.initialPrice;
+            let qty = item.rateType === 'wholesale' ? 3 : 1;
+            return { name: item.id.toUpperCase(), price: finalPrice, quantity: qty };
+        });
+        
+        localStorage.setItem('mk50Cart', JSON.stringify(orderData));
+        window.location.href = 'orders.html';
+    }
+
+    window.onload = buildShoeWall;
+</script>
+
+</body>
+</html>

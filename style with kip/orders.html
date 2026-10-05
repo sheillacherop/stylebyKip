@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalize Order | MK50</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { 
+            --almond: #CEB093; 
+            --black: #000000; 
+            --onyx: #0a0a0a; 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Using wall1.png with a smooth dark tint so your text remains easy to read */
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('images/wall1.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            padding-top: 140px;
+            padding-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        /* Completely transparent navigation layout — no dark bar background */
+        nav {
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            padding: 35px 5%;
+            background: transparent; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            z-index: 1000;
+        }
+        .logo { 
+            font-family: 'Rock Salt'; 
+            color: var(--almond); 
+            font-size: 1.6rem; 
+            text-decoration: none; 
+        }
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        .nav-links a { 
+            color: #fff; 
+            text-decoration: none; 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: var(--almond);
+        }
+
+        .order-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(10, 10, 10, 0.9); 
+            backdrop-filter: blur(5px);
+            padding: 40px;
+            border: 1px solid rgba(206,192,179,0.15);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 { font-family: 'Rock Salt'; color: var(--almond); text-align: center; margin-bottom: 30px; font-size: 1.8rem; }
+
+        .summary-box {
+            background: rgba(17, 17, 17, 0.9);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .item-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .item-main {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .item-details {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .size-input-wrapper {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .size-input-wrapper label {
+            font-size: 0.75rem;
+            color: var(--almond);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .size-box {
+            width: 140px;
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 0.8rem;
+            outline: none;
+            border-radius: 4px;
+        }
+        .size-box:focus { border-color: var(--almond); }
+
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        .total-row {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 900;
+            color: var(--almond);
+            font-size: 1.3rem;
+            border-top: 1px solid #222;
+            padding-top: 15px;
+        }
+
+        .input-group { margin-top: 25px; }
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 15px;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            margin-bottom: 15px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        input:focus, select:focus { border-color: var(--almond); }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+        
+        .confirm-btn {
+            width: 100%;
+            background: #128C7E; 
+            color: #fff;
+            padding: 20px;
+            border: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 25px;
+            border-radius: 4px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+        .confirm-btn:hover { background: #075E54; transform: scale(1.01); }
+    </style>
+</head>
+<body>
+
+<!-- Clean text links floating naturally directly on your wallpaper image -->
+<nav>
+    <a href="index.html" class="logo">MK50</a>
+    <div class="nav-links">
+        <a href="intro.html">Home</a>
+        <a href="products.html">Back to Shop</a>
+    </div>
+</nav>
+
+<div class="order-container">
+    <h1>Finalize</h1>
+    
+    <div class="summary-box" id="order-list"></div>
+
+    <div class="input-group">
+        <label>Customer Identity</label>
+        <input type="text" id="cust-name" placeholder="Your Full Name">
+        <input type="text" id="cust-location" placeholder="Delivery Location (e.g. Nairobi CBD, Ruiru, Kisumu)">
+        
+        <label>Delivery Method & Fee</label>
+        <select id="delivery-zone" onchange="calculateGrandTotal()">
+            <option value="0" data-label="Pick up at Shop (Free)">Pick up at Shop — Free</option>
+            <option value="200" data-label="Nairobi CBD / Near CBD (KSh 200)">Nairobi CBD / Near CBD — KSh 200</option>
+            <option value="350" data-label="Nairobi Outer Areas / Suburbs (KSh 350)">Nairobi Outer Areas — KSh 350</option>
+            <option value="450" data-label="Upcountry / Outside Nairobi via Courier (KSh 450)">Upcountry via Courier — KSh 450</option>
+        </select>
+    </div>
+
+    <button class="confirm-btn" onclick="sendToWhatsApp()">
+        <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i> Complete Order on WhatsApp
+    </button>
+</div>
+
+<script>
+    const cart = JSON.parse(localStorage.getItem('mk50Cart')) || [];
+    let itemsBaseTotal = 0;
+
+    function displayOrder() {
+        const listDiv = document.getElementById('order-list');
+        if (cart.length === 0) {
+            listDiv.innerHTML = "<p style='text-align:center; color:#666; padding: 20px 0;'>Your bag is empty.</p>";
+            return;
+        }
+
+        itemsBaseTotal = 0;
+        let html = "";
+        
+        cart.forEach((item, index) => {
+            itemsBaseTotal += item.price;
+            let orderTypeLabel = item.quantity === 3 ? "Wholesale Multi-Pair Set (3 Pairs)" : "Standard Retail Single Pair";
+            let placeholderText = item.quantity === 3 ? "e.g. 39, 40, 41" : "e.g. 43";
+            
+            html += `
+                <div class="item-row">
+                    <div class="item-main">
+                        <span>${item.name}</span>
+                        <span>KSh ${item.price.toLocaleString()}</span>
+                    </div>
+                    <div class="item-details">${orderTypeLabel}</div>
+                    <div class="size-input-wrapper">
+                        <label>Enter Size(s):</label>
+                        <input type="text" class="size-box" id="size-${index}" placeholder="${placeholderText}" required>
+                    </div>
+                </div>`;
+        });
+
+        html += `
+            <div class="fee-row"><span>Items Total</span><span>KSh <span id="label-base-total">0</span></span></div>
+            <div class="fee-row"><span>Delivery Fee</span><span>KSh <span id="label-delivery-fee">0</span></span></div>
+            <div class="total-row"><span>Total Price</span><span>KSh <span id="label-grand-total">0</span></span></div>`;
+            
+        listDiv.innerHTML = html;
+        calculateGrandTotal();
+    }
+
+    function calculateGrandTotal() {
+        if (cart.length === 0) return;
+        
+        const deliveryFee = parseInt(document.getElementById('delivery-zone').value) || 0;
+        const grandTotal = itemsBaseTotal + deliveryFee;
+        
+        document.getElementById('label-base-total').innerText = itemsBaseTotal.toLocaleString();
+        document.getElementById('label-delivery-fee').innerText = deliveryFee.toLocaleString();
+        document.getElementById('label-grand-total').innerText = grandTotal.toLocaleString();
+    }
+
+    function sendToWhatsApp() {
+        const name = document.getElementById('cust-name').value.trim();
+        const loc = document.getElementById('cust-location').value.trim();
+        const deliverySelect = document.getElementById('delivery-zone');
+        const deliveryFee = parseInt(deliverySelect.value) || 0;
+        const deliveryLabel = deliverySelect.options[deliverySelect.selectedIndex].getAttribute('data-label');
+
+        if(!name || !loc) {
+            alert("Please fill in your name and delivery address to continue!");
+            return;
+        }
+
+        let missingSizes = false;
+        let itemsBreakdownString = "";
+
+        cart.forEach((item, index) => {
+            const sizeVal = document.getElementById(`size-${index}`).value.trim();
+            if(!sizeVal) {
+                missingSizes = true;
+            }
+            let rateTier = item.quantity === 3 ? "WHOLESALE BUNDLE (3 PAIRS)" : "RETAIL SINGLE";
+            itemsBreakdownString += `• *Item:* ${item.name}%0A  *Type:* ${rateTier}%0A  *Sizes Wanted:* ${sizeVal}%0A  *Price:* KSh ${item.price.toLocaleString()}%0A%0A`;
+        });
+
+        if(missingSizes) {
+            alert("Please input the shoe size options for your selection so we can check availability!");
+            return;
+        }
+
+        let totalAmount = itemsBaseTotal + deliveryFee;
+
+        let message = `*NEW ORDER FROM MK50*%0A`;
+        message += `============================%0A`;
+        message += `*CUSTOMER DETAILS*%0A`;
+        message += `• *Name:* ${name}%0A`;
+        message += `• *Location:* ${loc}%0A`;
+        message += `• *Delivery:* ${deliveryLabel}%0A`;
+        message += `============================%0A%0A`;
+        message += `*ITEMS ORDERED:*%0A`;
+        message += itemsBreakdownString;
+        message += `============================%0A`;
+        message += `*Subtotal:* KSh ${itemsBaseTotal.toLocaleString()}%0A`;
+        message += `*Delivery Fee:* KSh ${deliveryFee.toLocaleString()}%0A`;
+        message += `*TOTAL PRICE:* *KSh ${totalAmount.toLocaleString()}*%0A`;
+        message += `============================%0A%0A`;
+        message += `Please verify item size availability and text me payment instructions to finalize!`;
+
+        window.open(`https://wa.me/254768660198?text=${message}`, '_blank');
+    }
+
+    displayOrder();
+</script>
+
+</body>
+</html>
